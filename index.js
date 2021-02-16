@@ -11,4 +11,4 @@ const server = express()
 
 const io = socketIO(server);
 
-setInterval(() => io.emit("time", new Date().toTimeString()), 1000 * 60);
+// setInterval(() => io.emit("time", new Date().toTimeString()), 1000 * 60);
