@@ -12,7 +12,12 @@ const server = express()
     console.log(`[server] Listening to port: ${port}`);
   });
 
-const io = socketIO(server);
+const io = socketIO(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
 
 io.on("connection", (socket) => {
   console.log("User joined => ", socket.id);
