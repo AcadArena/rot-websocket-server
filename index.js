@@ -1,10 +1,12 @@
 const express = require("express");
 const socketIO = require("socket.io");
+const cors = require("cors");
 const INDEXFILE = "/index.html";
 const { userJoin, getCurrentUser } = require("./utils/users");
 
 const port = process.env.PORT || 3200;
 const server = express()
+  .use(cors())
   .use((req, res) => res.sendFile(INDEXFILE, { root: __dirname }))
   .listen(port, () => {
     console.log(`[server] Listening to port: ${port}`);
