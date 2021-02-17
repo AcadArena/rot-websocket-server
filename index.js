@@ -14,7 +14,8 @@ const server = express()
 
 const io = socketIO(server, {
   cors: {
-    origin: /.*\.acadarena\.com/g,
+    // origin: /.*\.acadarena\.com/g,
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
