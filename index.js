@@ -27,9 +27,11 @@ io.on("connection", (socket) => {
   socket.on("joinRoom", ({ username, room }) => {
     const user = userJoin(socket.id, username, room);
     socket.join(user.room);
-    socket
-      .to(user.room)
-      .emit("message", `What's gucci my gamer? @${user.username}`);
+    console.log(`${user.username} joined ${user.room}`);
+    io.to(user.room).emit(
+      "message",
+      `What's gucci my gamer? @${user.username}`
+    );
   });
 });
 
