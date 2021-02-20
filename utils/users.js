@@ -1,4 +1,4 @@
-const users = [];
+let users = [];
 
 const userJoin = (id, username, room) => {
   const user = { id, username, room };
