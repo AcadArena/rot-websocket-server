@@ -4,7 +4,8 @@
   "description": "websocket server for remote over tool by AcadArena",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index",
+    "start": "node index.js",
+    "dev": "nodemon index",
     "test": "\u001b[A"
   },
   "author": "",
