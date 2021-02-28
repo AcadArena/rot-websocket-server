@@ -1,11 +1,11 @@
-let live = {};
-
-const setLiveData = (data) => {
-  live = { ...live, ...data };
+let rooms = {};
+const setLiveData = (data, roomId) => {
+  if (!Boolean(roomId)) return;
+  rooms = { ...rooms, [roomId]: { ...rooms[roomId], ...data } };
 };
 
-const getLiveData = () => {
-  return live;
+const getLiveData = (roomId) => {
+  return rooms[roomId];
 };
 
 module.exports = {

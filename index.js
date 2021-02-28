@@ -2,7 +2,13 @@ const express = require("express");
 const socketIO = require("socket.io");
 const cors = require("cors");
 const INDEXFILE = "/index.html";
-const { userJoin, getCurrentUser } = require("./utils/users");
+const {
+  userJoin,
+  getCurrentUser,
+  getUsersInRoom,
+  removeUser,
+  updateUsername,
+} = require("./utils/users");
 const { getLiveData, setLiveData } = require("./utils/live");
 
 const port = process.env.PORT || 3200;
@@ -22,12 +28,32 @@ const io = socketIO(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("User joined => ", socket.id);
-  socket.emit("set_live_settings", getLiveData());
+  socket.on("set_live_settings", ({ data, room }) => {
+    setLiveData(data, room);
+    io.to(room).emit("set_live_settings", data);
+  });
 
-  socket.on("set_live_settings", (data) => {
-    setLiveData(data);
-    io.emit("set_live_settings", data);
+  socket.on("join_room", ({ room, username }) => {
+    if (!room) retrun;
+    if (socket.lastRoom) {
+      socket.leave(socket.lastRoom);
+      socket.lastRoom = null;
+    }
+    const user = userJoin(socket.id, username, room);
+    socket.join(room);
+    socket.lastRoom = room;
+    console.log(`[${user.room}]: ${user.username} joined`);
+    io.sockets.in(user.room).emit("usersUpdate", getUsersInRoom(user.room));
+    socket.emit("set_live_settings", getLiveData(user.room));
+  });
+
+  socket.on("update_user", ({ room, username }) => {
+    updateUsername(socket.id, username);
+    io.sockets.in(room).emit("usersUpdate", getUsersInRoom(room));
+  });
+
+  socket.on("disconnect", (reason) => {
+    removeUser(socket.id);
   });
 });
 
