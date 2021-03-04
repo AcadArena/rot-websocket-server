@@ -52,6 +52,10 @@ io.on("connection", (socket) => {
     io.sockets.in(room).emit("usersUpdate", getUsersInRoom(room));
   });
 
+  socket.on("time_command", ({ command, room }) => {
+    io.sockets.in(room).emit("time_command", command);
+  });
+
   socket.on("disconnect", (reason) => {
     removeUser(socket.id);
   });
